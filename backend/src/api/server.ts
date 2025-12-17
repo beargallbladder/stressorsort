@@ -6,6 +6,8 @@ import { z } from "zod";
 import { maskVin } from "../utils/vin";
 import { computeAndPersistScoreForLead } from "../jobs/enrichLead";
 import { rateLimit } from "./utilRateLimit";
+import { decodeVinBatch } from "../providers/nhtsa";
+import { sha256Hex } from "../utils/crypto";
 
 dotenv.config();
 
@@ -73,6 +75,45 @@ app.post("/api/leads/ingest", async (req, res) => {
 				updated_at = now()
 		`;
 		await pg.query(sql, params);
+		// vPIC batch decode for new VINs (up to 50 per call)
+		const vins = Array.from(new Set(body.map((b) => b.vin)));
+		if (vins.length) {
+			const place = vins.map((_, i) => `($${i + 1})`).join(",");
+			const missingFacts = await pg.query(
+				`select v.vin from (values ${place}) as v(vin)
+         left join vehicle_facts f on f.vin = v.vin
+         where f.vin is null`,
+				vins,
+			);
+			const toDecode = missingFacts.rows.map((r) => String(r.vin));
+			while (toDecode.length) {
+				const chunk = toDecode.splice(0, 50);
+				try {
+					const decoded = await decodeVinBatch(chunk);
+					const values2: string[] = [];
+					const params2: any[] = [];
+					let j = 1;
+					for (const vin of chunk) {
+						const d = decoded[vin] || {};
+						values2.push(`($${j++}, $${j++}, $${j++}, $${j++}, $${j++}, $${j++})`);
+						params2.push(
+							vin,
+							sha256Hex(vin),
+							d.model_year ?? null,
+							d.make ?? null,
+							d.model ?? null,
+							d.raw ?? {},
+						);
+					}
+					await pg.query(
+						`insert into vehicle_facts (vin, vin_hash, model_year, make, model, decoded_json, decoded_at)
+             values ${values2.join(",")}
+             on conflict (vin) do update set vin_hash = excluded.vin_hash, model_year = excluded.model_year, make = excluded.make, model = excluded.model, decoded_json = excluded.decoded_json, decoded_at = now()`,
+						params2,
+					);
+				} catch {}
+			}
+		}
 		// Kick off enrichment best-effort (non-blocking)
 		for (const row of body) {
 			// Fire and forget; worker service can also run continuously

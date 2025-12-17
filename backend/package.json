@@ -8,6 +8,9 @@
     "start": "node --enable-source-maps dist/api/server.js",
     "build": "tsc -p tsconfig.json",
     "migrate": "tsx src/db/migrate.ts",
+    "offline:classes": "tsx src/offline/buildVehicleClasses.ts",
+    "offline:scenarios": "tsx src/offline/buildScenarios.ts",
+    "offline:tensor": "tsx src/offline/precomputeTensor.ts",
     "worker:dev": "tsx watch src/jobs/index.ts",
     "worker:start": "node --enable-source-maps dist/jobs/index.js"
   },

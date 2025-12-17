@@ -20,6 +20,25 @@ export async function decodeVinWithVpic(vin: string): Promise<VpicDecoded> {
 	return { model_year, make, model, raw: json };
 }
 
+export async function decodeVinBatch(vins: string[]): Promise<Record<string, VpicDecoded>> {
+	if (!vins.length) return {};
+	// vPIC batch: up to 50 VINs, comma-separated
+	const list = vins.slice(0, 50).map((v) => encodeURIComponent(v)).join(",");
+	const url = `https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValuesBatch/${list}?format=json`;
+	const json = await httpGetJson<any>(url);
+	const out: Record<string, VpicDecoded> = {};
+	for (const r of json?.Results || []) {
+		const vin = (r?.VIN || "").toString();
+		out[vin] = {
+			model_year: Number(r?.ModelYear) || undefined,
+			make: r?.Make || undefined,
+			model: r?.Model || undefined,
+			raw: r,
+		};
+	}
+	return out;
+}
+
 export type RecallSummary = {
 	open_recall_count: number;
 	raw: any;

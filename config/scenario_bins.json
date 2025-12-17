@@ -1,0 +1,10 @@
+{
+  "version": "v1.0.0",
+  "cold_thresholds_f": { "mild": 32, "hard": 20, "extreme": 5 },
+  "volatility_thresholds_f": { "low": 10, "med": 20, "high": 35 },
+  "freeze_thaw_cycles_bins": [0, 2, 3],
+  "snow_ice_prob_thresholds": { "none": 0.2, "some": 0.5, "high": 0.7 },
+  "timing_categories": ["weekday-high", "monday-low", "weekend", "holiday-prox", "month-end"]
+}
+
+
