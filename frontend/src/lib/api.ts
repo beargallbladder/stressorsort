@@ -6,6 +6,7 @@ export type DealerLeadsResponse = {
     priority_score: number | null;
     bucket: string | null;
     reasons: string[];
+    offers: string[];
     scored_at: string | null;
   }>;
 };

@@ -2,6 +2,7 @@ export function ExplainView({ data }: { data: any }) {
   if (!data) return <div>No data</div>;
   const fv = data.feature_vector;
   const sc = data.score;
+  const offers: string[] = data.offers || [];
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
       <div>
@@ -11,6 +12,8 @@ export function ExplainView({ data }: { data: any }) {
         <div>Reasons: {sc?.reasons?.join(", ") || "-"}</div>
         <div>Version: {sc?.score_version || "-"}</div>
         <div>Scored: {sc?.scored_at || "-"}</div>
+        <h3>Suggested Services</h3>
+        <div>{offers.length ? offers.join(", ") : "-"}</div>
       </div>
       <div>
         <h3>Features</h3>

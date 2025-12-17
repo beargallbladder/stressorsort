@@ -4,6 +4,7 @@ type LeadRow = {
   priority_score: number | null;
   bucket: string | null;
   reasons: string[];
+  offers: string[];
   scored_at: string | null;
 };
 
@@ -17,6 +18,7 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
           <th style={{ textAlign: "right", borderBottom: "1px solid #ddd", padding: "8px" }}>Score</th>
           <th style={{ textAlign: "left", borderBottom: "1px solid #ddd", padding: "8px" }}>Bucket</th>
           <th style={{ textAlign: "left", borderBottom: "1px solid #ddd", padding: "8px" }}>Reasons</th>
+          <th style={{ textAlign: "left", borderBottom: "1px solid #ddd", padding: "8px" }}>Suggested Services</th>
         </tr>
       </thead>
       <tbody>
@@ -32,6 +34,9 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
             <td style={{ padding: "8px", borderBottom: "1px solid #f0f0f0" }}>{r.bucket ?? "-"}</td>
             <td style={{ padding: "8px", borderBottom: "1px solid #f0f0f0" }}>
               {r.reasons?.length ? r.reasons.join(", ") : "-"}
+            </td>
+            <td style={{ padding: "8px", borderBottom: "1px solid #f0f0f0" }}>
+              {r.offers?.length ? r.offers.join(", ") : "-"}
             </td>
           </tr>
         ))}

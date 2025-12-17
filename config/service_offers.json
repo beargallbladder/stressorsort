@@ -1,0 +1,17 @@
+{
+  "version": "v1.0.0",
+  "mapping": {
+    "THERMAL_COLD": ["Battery test/replacement", "Coolant check", "HVAC/defrost check"],
+    "THERMAL_SWING": ["Battery test/replacement", "Belts/hoses inspection"],
+    "FREEZE_THAW": ["Door seals/latches lube", "Suspension inspection"],
+    "SNOW_ICE_RISK": ["Wiper blades/washer fluid", "Tire tread/rotation", "Brake inspection"],
+    "STORM_ALERT": ["Multi-point inspection", "Battery test/replacement"],
+    "HOLIDAY_PROXIMITY": ["Multi-point inspection"],
+    "WEEKEND_ADJACENCY": ["Quick-lube/oil service"],
+    "MONTH_BOUNDARY": ["Multi-point inspection"],
+    "RECALL_ATTENTION": ["Recall check/service"],
+    "OLDER_VEHICLE_COHORT": ["Battery test/replacement", "Brake inspection", "Belts/hoses inspection"]
+  }
+}
+
+

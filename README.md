@@ -62,6 +62,13 @@ npm install
 API_BASE_URL=http://localhost:3001 API_KEY=dev-local-key npm run dev
 ```
 
+### Suggested Services (Dealer UX)
+- Config-driven mapping at `config/service_offers.json`
+- Backend computes offers per lead from stressor tags and returns them in:
+  - `GET /api/dealers/:dealerId/leads` as `offers: string[]`
+  - `GET /api/leads/:leadId/explain` as `offers: string[]`
+- Frontend displays a "Suggested Services" column and section.
+
 ### Security/Compliance
 - VIN is never logged (redacted logger) and masked in UI.
 - `vin_hash` (SHA-256) is stored in facts/recalls/vectors to reduce VIN sprawl.

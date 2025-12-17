@@ -8,6 +8,7 @@ import { computeAndPersistScoreForLead } from "../jobs/enrichLead";
 import { rateLimit } from "./utilRateLimit";
 import { decodeVinBatch } from "../providers/nhtsa";
 import { sha256Hex } from "../utils/crypto";
+import { mapTagsToOffers } from "../services/offers";
 
 dotenv.config();
 
@@ -146,6 +147,7 @@ app.get("/api/dealers/:dealerId/leads", async (req, res) => {
 			priority_score: r.priority_score ?? null,
 			bucket: r.bucket ?? null,
 			reasons: r.reasons ?? [],
+			offers: mapTagsToOffers(r.reasons ?? []),
 			scored_at: r.scored_at ?? null,
 		}));
 		res.json({ dealer_id: dealerId, leads: data });
@@ -180,6 +182,7 @@ app.get("/api/leads/:leadId/explain", async (req, res) => {
 			lead_id: leadId,
 			feature_vector: fv.rows[0] || null,
 			score: score.rows[0] || null,
+			offers: mapTagsToOffers(score.rows[0]?.reasons ?? []),
 		});
 	} catch (err: any) {
 		logger.error({ err }, "explain failed");
