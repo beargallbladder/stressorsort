@@ -141,7 +141,7 @@ app.get("/api/dealers/:dealerId/leads", async (req, res) => {
       `,
 			[dealerId],
 		);
-		const data = rows.rows.map((r) => ({
+		const data = rows.rows.map((r: any) => ({
 			lead_id: r.lead_id,
 			vin_masked: maskVin(r.vin),
 			priority_score: r.priority_score ?? null,

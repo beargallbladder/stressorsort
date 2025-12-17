@@ -13,7 +13,7 @@ export async function scoreLeadViaLookup(vehicleClassId: string, scenarioId: str
      where vehicle_class_id = $1 and scenario_id = $2`,
 		[vehicleClassId, scenarioId],
 	);
-	if (exact.rowCount > 0) {
+	if (exact.rowCount && exact.rowCount > 0) {
 		const r = exact.rows[0];
 		return {
 			score: Number(r.score) || 0,
@@ -34,7 +34,7 @@ export async function scoreLeadViaLookup(vehicleClassId: string, scenarioId: str
       limit 20`,
 		[vehicleClassId, scenarioId],
 	);
-	if (rows.rowCount === 0) {
+	if (!rows.rowCount || rows.rowCount === 0) {
 		return { score: 0, reasons: [], model_version: "v1.0.0", confidence: 0.3 };
 	}
 	let weighted = 0;

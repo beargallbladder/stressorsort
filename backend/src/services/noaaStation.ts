@@ -6,7 +6,7 @@ const NOAA_TOKEN = process.env.NOAA_TOKEN || "";
 export async function getOrResolveStation(geoKey: string, lat: number, lon: number, startDate: string, endDate: string): Promise<string | null> {
 	// Try cache
 	const cached = await pg.query(`select station_id from noaa_station_cache where geo_key = $1`, [geoKey]);
-	if (cached.rowCount > 0) {
+	if (cached.rowCount && cached.rowCount > 0) {
 		return String(cached.rows[0].station_id);
 	}
 	if (!NOAA_TOKEN) return null;

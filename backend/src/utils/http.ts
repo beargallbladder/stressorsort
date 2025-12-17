@@ -1,7 +1,6 @@
 import { setTimeout as delay } from "node:timers/promises";
-import { fetch } from "undici";
 
-export async function httpGetJson<T>(url: string, init?: RequestInit, retries = 2): Promise<T> {
+export async function httpGetJson<T>(url: string, init?: any, retries = 2): Promise<T> {
 	let lastErr: any;
 	for (let i = 0; i <= retries; i++) {
 		try {
