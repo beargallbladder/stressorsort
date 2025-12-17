@@ -23,8 +23,15 @@ const logger = pino({
 const app = express();
 app.use(express.json({ limit: "1mb" }));
 
+// Public health check BEFORE auth
+app.get("/api/health", async (_req, res) => {
+	const r = await pg.query("select 1 as ok");
+	res.json({ ok: true, db: r.rows[0].ok === 1 });
+});
+
 // Simple API key auth
 app.use((req, res, next) => {
+	if (req.path === "/api/health") return next();
 	const provided = req.header("x-api-key") || req.header("X-API-Key");
 	const expected = process.env.API_KEY;
 	if (!expected || provided === expected) {
@@ -35,12 +42,6 @@ app.use((req, res, next) => {
 
 // Light rate limiter (in-memory, per-key)
 app.use(rateLimit({ windowMs: 60_000, limit: Number(process.env.RATE_LIMIT_PER_MIN || 120) }));
-
-// Basic health
-app.get("/api/health", async (_req, res) => {
-	const r = await pg.query("select 1 as ok");
-	res.json({ ok: true, db: r.rows[0].ok === 1 });
-});
 
 const IngestLeadSchema = z.object({
 	lead_id: z.string().min(1),
