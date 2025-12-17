@@ -14,6 +14,8 @@ services:
         fromDatabase:
           name: stressorsort-db
           property: connectionString
+      - key: API_KEY
+        value: "48499a82a28fc40de4bcbddb6ebe082ced5db009175d3a25"
       - key: LOG_LEVEL
         value: info
       - key: RATE_LIMIT_PER_MIN
@@ -42,6 +44,8 @@ services:
         fromDatabase:
           name: stressorsort-db
           property: connectionString
+      - key: API_KEY
+        value: "48499a82a28fc40de4bcbddb6ebe082ced5db009175d3a25"
       - key: LOG_LEVEL
         value: info
       - key: RATE_LIMIT_PER_MIN
