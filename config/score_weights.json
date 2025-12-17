@@ -1,0 +1,15 @@
+{
+  "version": "v1.0.0",
+  "weights": {
+    "weather_stress": 0.45,
+    "forecast_urgency": 0.30,
+    "action_timing": 0.15,
+    "vehicle_context": 0.10
+  },
+  "caps": {
+    "action_timing_multiplier_min": 0.85,
+    "action_timing_multiplier_max": 1.15
+  }
+}
+
+

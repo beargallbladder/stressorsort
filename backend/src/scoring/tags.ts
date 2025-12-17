@@ -1,0 +1,16 @@
+export const STRESSOR_TAGS = [
+	"THERMAL_COLD",
+	"THERMAL_SWING",
+	"FREEZE_THAW",
+	"SNOW_ICE_RISK",
+	"STORM_ALERT",
+	"HOLIDAY_PROXIMITY",
+	"WEEKEND_ADJACENCY",
+	"MONTH_BOUNDARY",
+	"RECALL_ATTENTION",
+	"OLDER_VEHICLE_COHORT",
+] as const;
+
+export type StressorTag = (typeof STRESSOR_TAGS)[number];
+
+
